@@ -1,0 +1,137 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  /* Colors */
+  --color-navy:     #1a3a5c;
+  --color-blue:     #1e7fd4;
+  --color-teal:     #00b4b1;
+  --color-white:    #ffffff;
+  --color-offwhite: #f8f9fb;
+  --color-ink:      #111827;
+
+  /* Typography */
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+
+  --font-weight-normal:    400;
+  --font-weight-semibold:  600;
+  --font-weight-extrabold: 800;
+
+  --letter-spacing-tight: -0.02em;
+
+  --line-height-relaxed: 1.75;
+}
+
+/* ─── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+body {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  color: #374151;
+  background-color: var(--color-offwhite);
+  line-height: var(--line-height-relaxed);
+  overflow-x: hidden;
+}
+
+/* ─── Remove ALL default focus rings ───────────────────── */
+*:focus {
+  outline: none;
+}
+
+/* ─── Label / small-caps utility ────────────────────────── */
+.label-caps {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1.4;
+}
+
+/* ─── Form field shared base ────────────────────────────── */
+.field-base {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, #1a3a5c 15%, transparent);
+  background-color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  color: #111827;
+  border-radius: 0;
+  transition: border-color 150ms ease;
+  box-shadow: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.field-base::placeholder {
+  color: color-mix(in srgb, #111827 30%, transparent);
+}
+
+.field-base:focus {
+  border-color: #1a3a5c;
+  box-shadow: none;
+  outline: none;
+}
+
+/* ─── Custom select arrow ────────────────────────────────── */
+.field-select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%231a3a5c' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+}
+
+/* ─── File input zone ────────────────────────────────────── */
+.field-file-zone {
+  border: 1.5px dashed color-mix(in srgb, #1a3a5c 30%, transparent);
+  background-color: color-mix(in srgb, #1a3a5c 3%, transparent);
+  padding: 1rem;
+  cursor: pointer;
+  transition: border-color 150ms ease;
+}
+
+.field-file-zone:hover {
+  border-color: color-mix(in srgb, #1a3a5c 55%, transparent);
+}
+
+/* ─── Custom checkbox ────────────────────────────────────── */
+.checkbox-navy {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  min-width: 18px;
+  border: 1.5px solid #1a3a5c;
+  background-color: #ffffff;
+  border-radius: 0;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 150ms ease;
+  flex-shrink: 0;
+}
+
+.checkbox-navy:checked {
+  background-color: #1a3a5c;
+}
+
+.checkbox-navy:checked::after {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 1px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  border-top: none;
+  border-left: none;
+  transform: rotate(45deg);
+}
