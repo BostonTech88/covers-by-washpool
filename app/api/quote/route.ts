@@ -179,7 +179,7 @@ export async function POST(req: NextRequest) {
 </div>`;
 
     await resend.emails.send({
-      from:        "Covers by Washpool <cotizaciones@washpool.mx>",
+      from:        "Covers by Washpool <ventas@coversbywashpool.com>",
       to:          OWNER_EMAIL,
       replyTo:     correo,
       subject:     `${subjectPrefix} — ${nombre}`,
