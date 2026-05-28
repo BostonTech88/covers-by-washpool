@@ -7,7 +7,7 @@ const steps = [
   {
     number: "02",
     title: "Recibes tu propuesta en 24 horas",
-    body: "Sin llamadas, sin visitas obligatorias. Te mandamos una cotización clara y personalizada directo a tu correo.",
+    body: "Sin llamadas, sin visitas obligatorias. Te mandamos una cotización directo a tu correo.",
   },
   {
     number: "03",
@@ -16,7 +16,7 @@ const steps = [
   },
   {
     number: "04",
-    title: "Llega a tu puerta, lista para usar",
+    title: "Lista para usar",
     body: "Envío a todo México con instrucciones de instalación. Si tienes dudas, te apoyamos en remoto.",
   },
 ];

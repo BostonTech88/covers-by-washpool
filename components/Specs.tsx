@@ -9,7 +9,7 @@ const thermalSpecs: SpecItem[] = [
   { label: "Material", value: "LDPE 100%, burbujas de aire sellado" },
   { label: "Corte", value: "A medida exacta de tu alberca" },
   { label: "Envío", value: "Todo México" },
-  { label: "Tiempo de entrega", value: "8–15 días hábiles" },
+  { label: "Tiempo de entrega", value: "8–18 días hábiles" },
 ];
 
 const securitySpecs: SpecItem[] = [

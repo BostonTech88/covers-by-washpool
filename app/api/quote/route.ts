@@ -18,17 +18,17 @@ export async function POST(req: NextRequest) {
     const tipoProyecto  = data.get("tipo_proyecto")?.toString() ?? "";
     const largo         = data.get("largo")?.toString() ?? "";
     const ancho         = data.get("ancho")?.toString() ?? "";
-    const espacioAnclaje = data.get("espacioAnclaje")?.toString() ?? "";
-    const espacioAnclajeNuevo = data.get("espacio_anclaje")?.toString() ?? "";
     const formaAlberca  = data.get("formaAlberca")?.toString() ?? "";
     const notas         = data.get("notas")?.toString() ?? "";
-    const materialBorde = data.get("material_borde")?.toString() ?? "";
-    const obstaculos = data.get("obstaculos")?.toString() ?? "";
+    const notasObstaculos = data.get("notas_obstaculos")?.toString() ?? "";
 
     const isSeguridad = tipoCubierta.toLowerCase().includes("seguridad");
     const subjectPrefix = isSeguridad ? "Nueva cotización seguridad" : "Nueva cotización térmica";
 
-    const rawFiles = data.getAll("archivos") as File[];
+    const rawFiles = [
+      ...(data.getAll("archivos") as File[]),
+      ...(data.getAll("fotos_alrededores") as File[]),
+    ];
     const attachments: { filename: string; content: Buffer }[] = [];
 
     for (const file of rawFiles) {
@@ -42,7 +42,6 @@ export async function POST(req: NextRequest) {
     }
 
     const displayPhone = whatsapp || telefono;
-    const anchorSpace = espacioAnclajeNuevo || espacioAnclaje;
 
     const html = isSeguridad
       ? `
@@ -95,21 +94,11 @@ export async function POST(req: NextRequest) {
     </table>
 
     <h2 style="font-size:12px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#6b7280;margin:0 0 16px;">
-      Instalación
+      Alrededores
     </h2>
     <table style="width:100%;border-collapse:collapse;margin-bottom:32px;">
-      ${row("Espacio de anclaje", anchorSpace || "—")}
-      ${row("Material del borde", materialBorde || "—")}
-      ${row("Obstáculos", obstaculos || "Ninguno")}
+      ${row("Notas de obstáculos", notasObstaculos.trim() ? notasObstaculos.replace(/\n/g, "<br>") : "Sin notas")}
     </table>
-
-    ${notas ? `
-    <h2 style="font-size:12px;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:#6b7280;margin:0 0 12px;">
-      Notas adicionales
-    </h2>
-    <p style="background:#f8f9fb;border-left:3px solid #00b4b1;padding:12px 16px;margin:0 0 32px;font-size:14px;line-height:1.6;color:#374151;">
-      ${notas.replace(/\n/g, "<br>")}
-    </p>` : ""}
 
     ${attachments.length > 0 ? `
     <p style="font-size:13px;color:#6b7280;">

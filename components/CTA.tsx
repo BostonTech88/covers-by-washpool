@@ -1,27 +1,14 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 type ProductType = "termica" | "seguridad";
 
-type ThermalProjectType = "Casa" | "Negocio";
+type ThermalProjectType = "Casa" | "Hotel / Club / Condominio";
 type ThermalShapeType = "Rectangular" | "Irregular";
-type SecurityProjectType = "Casa" | "Negocio";
+type SecurityProjectType = "Casa" | "Hotel / Club / Condominio";
 type SecurityShapeType = "Rectangular" | "Irregular";
-type SecurityAnchorSpace = "Menos de 30 cm" | "30 – 60 cm" | "Más de 60 cm" | "No lo sé";
-type SecurityEdgeMaterial =
-  | "Concreto o cemento"
-  | "Loseta o cantera"
-  | "Madera o deck"
-  | "Otro";
-type SecurityObstacle =
-  | "Escaleras externas o barandales"
-  | "Columnas o pilares"
-  | "Jardineras o macetas fijas"
-  | "Equipos pegados al borde (bomba, filtro)"
-  | "Desniveles en el piso"
-  | "Ninguno";
-
 type FormState = {
   nombre: string;
   correo: string;
@@ -86,9 +73,7 @@ type SecurityState = {
   largo: string;
   ancho: string;
   archivo: File | null;
-  espacioAnclaje: SecurityAnchorSpace | "";
-  materialBorde: SecurityEdgeMaterial | "";
-  obstaculos: SecurityObstacle[];
+  notasObstaculos: string;
   confirmacion: boolean;
 };
 
@@ -102,9 +87,7 @@ const SECURITY_INITIAL: SecurityState = {
   largo: "",
   ancho: "",
   archivo: null,
-  espacioAnclaje: "",
-  materialBorde: "",
-  obstaculos: [],
+  notasObstaculos: "",
   confirmacion: false,
 };
 
@@ -284,6 +267,8 @@ export default function CTA() {
   const fileRef = useRef<HTMLInputElement>(null);
   const thermalFileRef = useRef<HTMLInputElement>(null);
   const securityFileRef = useRef<HTMLInputElement>(null);
+  const securityPhotosRef = useRef<HTMLInputElement>(null);
+  const [securityPhotoNames, setSecurityPhotoNames] = useState<string[]>([]);
   const formSectionRef = useRef<HTMLDivElement>(null);
   const scrollPendingRef = useRef(false);
 
@@ -421,8 +406,6 @@ export default function CTA() {
       if (!next.archivo) errs.archivo = "Necesitamos un plano o croquis para cotizar esta forma de alberca.";
     }
 
-    if (!next.espacioAnclaje) errs.espacioAnclaje = "Selecciona el espacio de anclaje.";
-    if (!next.materialBorde) errs.materialBorde = "Selecciona el material del borde.";
     if (!next.confirmacion) errs.confirmacion = "Debes aceptar la confirmación.";
 
     return errs;
@@ -453,9 +436,13 @@ export default function CTA() {
       if (security.forma === "Irregular" && security.archivo) {
         data.append("archivos", security.archivo);
       }
-      data.set("espacio_anclaje", security.espacioAnclaje);
-      data.set("material_borde", security.materialBorde);
-      data.set("obstaculos", (security.obstaculos.length ? security.obstaculos : ["Ninguno"]).join(", "));
+      const photoFiles = securityPhotosRef.current?.files;
+      if (photoFiles) {
+        for (const file of Array.from(photoFiles)) {
+          if (file.size > 0) data.append("fotos_alrededores", file);
+        }
+      }
+      data.set("notas_obstaculos", security.notasObstaculos.trim());
       data.set("confirmacion", security.confirmacion ? "on" : "");
 
       const res = await fetch("/api/quote", { method: "POST", body: data });
@@ -477,13 +464,13 @@ export default function CTA() {
           "— Cotización sin costo ni compromiso",
           "— Anticipo del 50% al confirmar",
           "— Entrega en 10 a 12 semanas",
-          "— Garantía de ajuste perfecto",
+          "— Garantía de fabrica de 15 años",
         ]
       : [
           "— Cotización sin costo ni compromiso",
           "— Anticipo del 50% al confirmar",
           "— Entrega en 7 a 20 días según producto",
-          "— Garantía de ajuste perfecto",
+          "— Garantía de fabrica de 1 año",
         ];
 
   return (
@@ -512,7 +499,7 @@ export default function CTA() {
                 Cubierta Térmica
               </h3>
               <p className="text-sm leading-relaxed" style={{ color: "#374151" }}>
-                Para conservar calor, reducir evaporación y ahorrar en químicos.
+                Para conservar limpieza, calor, reducir evaporación y ahorrar en químicos.
               </p>
             </button>
 
@@ -573,8 +560,7 @@ export default function CTA() {
                   ¿Cómo medir tu alberca?
                 </p>
                 <p className="text-sm leading-relaxed" style={{ color: "#374151" }}>
-                  Mide de pared a pared en el punto más largo y en el punto más ancho, a nivel del
-                  borde de la alberca, no de la superficie del agua.
+                  Mide de pared a pared en el punto más largo y en el punto más ancho. Por debajo de la nariz de la alberca.
                   <br />
                   <br />
                   Para albercas rectangulares o cuadradas necesitas dos medidas: largo y ancho.
@@ -584,6 +570,50 @@ export default function CTA() {
                   Sin este documento no podemos cotizar.
                 </p>
               </div>
+
+              {product === "termica" && (
+                <div className="relative w-full h-[240px] mt-6">
+                  <Image
+                    src="/hero-2.jpg"
+                    alt=""
+                    fill
+                    sizes="(max-width: 768px) 100vw, 45vw"
+                    className="object-cover object-center"
+                  />
+                </div>
+              )}
+
+              {product === "seguridad" && (
+                <div className="mt-6 flex flex-col gap-0">
+                  <div className="relative w-full h-[180px]">
+                    <Image
+                      src="/seguridad-1.jpg"
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                      className="object-cover object-top"
+                    />
+                  </div>
+                  <div className="relative w-full h-[180px]">
+                    <Image
+                      src="/seguridad-2.jpg"
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                      className="object-cover object-center"
+                    />
+                  </div>
+                  <div className="relative w-full h-[180px]">
+                    <Image
+                      src="/seguridad-3.jpg"
+                      alt=""
+                      fill
+                      sizes="(max-width: 768px) 100vw, 45vw"
+                      className="object-cover object-center"
+                    />
+                  </div>
+                </div>
+              )}
             </div>
 
             <div className="border-l border-navy/10 pl-10 md:pl-12">
@@ -673,18 +703,18 @@ export default function CTA() {
                               : "border border-navy/20 bg-white"
                           }`}
                         >
-                          🏠 Casa o residencia
+                          Casa
                         </button>
                         <button
                           type="button"
-                          onClick={() => setThermalField("tipoProyecto", "Negocio")}
+                          onClick={() => setThermalField("tipoProyecto", "Hotel / Club / Condominio")}
                           className={`text-left p-4 cursor-pointer transition-colors ${
-                            thermal.tipoProyecto === "Negocio"
+                            thermal.tipoProyecto === "Hotel / Club / Condominio"
                               ? "border-2 border-navy bg-navy/5"
                               : "border border-navy/20 bg-white"
                           }`}
                         >
-                          🏢 Negocio
+                          Hotel / Club / Condominio
                         </button>
                       </div>
                       <InlineError message={thermalErrors.tipoProyecto} />
@@ -910,18 +940,18 @@ export default function CTA() {
                               : "border border-navy/20 bg-white"
                           }`}
                         >
-                          🏠 Casa o residencia
+                          Casa
                         </button>
                         <button
                           type="button"
-                          onClick={() => setSecurityField("tipoProyecto", "Negocio")}
+                          onClick={() => setSecurityField("tipoProyecto", "Hotel / Club / Condominio")}
                           className={`text-left p-4 cursor-pointer transition-colors ${
-                            security.tipoProyecto === "Negocio"
+                            security.tipoProyecto === "Hotel / Club / Condominio"
                               ? "border-2 border-navy bg-navy/5"
                               : "border border-navy/20 bg-white"
                           }`}
                         >
-                          🏢 Negocio
+                          Hotel / Club / Condominio
                         </button>
                       </div>
                       <InlineError message={securityErrors.tipoProyecto} />
@@ -1038,114 +1068,70 @@ export default function CTA() {
                       )}
                     </div>
 
-                    {/* STEP 4 — ESPACIO DE ANCLAJE */}
+                    {/* Aviso de anclaje */}
                     <div className="pt-1 border-t border-navy/[0.08]">
-                      <p className="label-caps text-teal mb-2">Espacio de anclaje perimetral</p>
+                      <div className="border-l-2 border-amber-400 bg-amber-50 px-4 py-3">
+                        <p className="text-sm leading-relaxed" style={{ color: "#374151" }}>
+                          ⚠️ Importante: Se requieren mínimo 30 cm de espacio libre alrededor del
+                          perímetro de la alberca para instalar el sistema de anclaje.
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Fotos y notas de alrededores */}
+                    <div className="pt-1 border-t border-navy/[0.08]">
+                      <p className="label-caps text-teal mb-2">Fotos de los alrededores</p>
                       <p className="text-xs mb-4" style={{ color: "#6b7280" }}>
-                        Distancia desde el borde de la alberca hasta el primer obstáculo en cada lado.
+                        Sube fotos de los obstáculos, desniveles o cualquier detalle relevante alrededor
+                        de tu alberca.
                       </p>
-                      <div className="grid grid-cols-2 gap-4">
-                        {(["Menos de 30 cm", "30 – 60 cm", "Más de 60 cm", "No lo sé"] as const).map(
-                          (opt) => (
-                            <button
-                              key={opt}
-                              type="button"
-                              onClick={() => setSecurityField("espacioAnclaje", opt)}
-                              className={`text-left p-3 cursor-pointer transition-colors ${
-                                security.espacioAnclaje === opt
-                                  ? "border-2 border-navy bg-navy/5"
-                                  : "border border-navy/20 bg-white"
-                              }`}
-                            >
-                              {opt}
-                            </button>
-                          )
+                      <label
+                        className="border border-dashed border-navy/30 p-6 cursor-pointer text-center block"
+                        style={{ background: "color-mix(in srgb, #1a3a5c 3%, transparent)" }}
+                      >
+                        {securityPhotoNames.length > 0 ? (
+                          <span className="text-sm text-navy font-medium text-center">
+                            {securityPhotoNames.join(", ")}
+                          </span>
+                        ) : (
+                          <>
+                            <span className="text-sm font-medium" style={{ color: "#374151" }}>
+                              Haz clic para subir fotos
+                            </span>
+                            <span className="block text-xs mt-2" style={{ color: "#6b7280" }}>
+                              JPG o PNG — múltiples archivos permitidos
+                            </span>
+                          </>
                         )}
-                      </div>
-                      <InlineError message={securityErrors.espacioAnclaje} />
-                    </div>
+                        <input
+                          ref={securityPhotosRef}
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          className="sr-only"
+                          onChange={(e) => {
+                            const files = Array.from(e.target.files ?? []);
+                            setSecurityPhotoNames(files.map((f) => f.name));
+                          }}
+                        />
+                      </label>
 
-                    {/* STEP 5 — MATERIAL DEL BORDE */}
-                    <div className="pt-1 border-t border-navy/[0.08]">
-                      <p className="label-caps text-teal mb-2">Material del borde de la alberca</p>
-                      <p className="text-xs mb-4" style={{ color: "#6b7280" }}>
-                        El tipo de ancla depende del material del borde.
-                      </p>
-                      <div className="grid grid-cols-2 gap-4">
-                        {(
-                          [
-                            "Concreto o cemento",
-                            "Loseta o cantera",
-                            "Madera o deck",
-                            "Otro",
-                          ] as const
-                        ).map((opt) => (
-                          <button
-                            key={opt}
-                            type="button"
-                            onClick={() => setSecurityField("materialBorde", opt)}
-                            className={`text-left p-3 cursor-pointer transition-colors ${
-                              security.materialBorde === opt
-                                ? "border-2 border-navy bg-navy/5"
-                                : "border border-navy/20 bg-white"
-                            }`}
-                          >
-                            {opt}
-                          </button>
-                        ))}
-                      </div>
-                      <InlineError message={securityErrors.materialBorde} />
-                    </div>
-
-                    {/* STEP 6 — OBSTÁCULOS */}
-                    <div className="pt-1 border-t border-navy/[0.08]">
-                      <p className="label-caps text-teal mb-2">Obstáculos alrededor</p>
-                      <p className="text-xs mb-4" style={{ color: "#6b7280" }}>
-                        Selecciona todo lo que aplique.
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        {(
-                          [
-                            "Escaleras externas o barandales",
-                            "Columnas o pilares",
-                            "Jardineras o macetas fijas",
-                            "Equipos pegados al borde (bomba, filtro)",
-                            "Desniveles en el piso",
-                            "Ninguno",
-                          ] as const
-                        ).map((opt) => {
-                          const checked = security.obstaculos.includes(opt);
-                          return (
-                            <label key={opt} className="flex items-start gap-3 cursor-pointer">
-                              <input
-                                type="checkbox"
-                                checked={checked}
-                                onChange={(e) => {
-                                  const isChecked = e.target.checked;
-                                  setSecurity((prev) => {
-                                    let nextList = prev.obstaculos.slice();
-                                    if (opt === "Ninguno") {
-                                      nextList = isChecked ? ["Ninguno"] : [];
-                                    } else {
-                                      nextList = nextList.filter((o) => o !== "Ninguno");
-                                      if (isChecked) nextList = [...nextList, opt];
-                                      else nextList = nextList.filter((o) => o !== opt);
-                                    }
-                                    return { ...prev, obstaculos: nextList };
-                                  });
-                                }}
-                                className="checkbox-navy mt-0.5"
-                              />
-                              <span className="text-sm leading-relaxed" style={{ color: "#374151" }}>
-                                {opt}
-                              </span>
-                            </label>
-                          );
-                        })}
+                      <div className="mt-6">
+                        <label className="label-caps text-teal block mb-2" htmlFor="s-notas-obstaculos">
+                          Notas de obstáculos
+                        </label>
+                        <textarea
+                          id="s-notas-obstaculos"
+                          rows={3}
+                          placeholder="Describe escaleras, columnas, jardineras, equipos pegados al borde, desniveles o cualquier detalle que debamos considerar."
+                          value={security.notasObstaculos}
+                          onChange={(e) => setSecurityField("notasObstaculos", e.target.value)}
+                          className="field-base w-full resize-none"
+                        />
                       </div>
                     </div>
 
-                    {/* STEP 7 — CONFIRMACIÓN */}
+                    {/* CONFIRMACIÓN */}
                     <div className="pt-1 border-t border-navy/[0.08]">
                       <label className="flex items-start gap-3 cursor-pointer">
                         <input
