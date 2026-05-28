@@ -41,6 +41,7 @@ export async function POST(req: NextRequest) {
     const ciudad        = data.get("ciudad")?.toString() ?? "";
     const tipo          = data.get("tipo")?.toString() ?? "";
     const tipoProyecto  = data.get("tipo_proyecto")?.toString() ?? "";
+    const medioContacto = data.get("medio_contacto")?.toString() ?? "";
     const largo         = data.get("largo")?.toString() ?? "";
     const ancho         = data.get("ancho")?.toString() ?? "";
     const formaAlberca  = data.get("formaAlberca")?.toString() ?? "";
@@ -71,6 +72,7 @@ export async function POST(req: NextRequest) {
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:32px;">
       ${row("Tipo de cubierta", `<strong>Cubierta de Seguridad</strong>`)}
+      ${row("Medio de contacto preferido", medioContacto || "—")}
     </table>
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:32px;">
@@ -141,6 +143,7 @@ export async function POST(req: NextRequest) {
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:32px;">
       ${row("Tipo de cubierta", `<strong>Cubierta Térmica</strong>`)}
+      ${row("Medio de contacto preferido", medioContacto || "—")}
     </table>
 
     <table style="width:100%;border-collapse:collapse;margin-bottom:32px;">

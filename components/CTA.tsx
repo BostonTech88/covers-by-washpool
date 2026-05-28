@@ -9,6 +9,7 @@ type ThermalProjectType = "Casa" | "Hotel / Club / Condominio";
 type ThermalShapeType = "Rectangular" | "Irregular";
 type SecurityProjectType = "Casa" | "Hotel / Club / Condominio";
 type SecurityShapeType = "Rectangular" | "Irregular";
+type ContactPreference = "WhatsApp" | "Correo electrónico";
 type FormState = {
   nombre: string;
   correo: string;
@@ -42,6 +43,7 @@ type ThermalState = {
   whatsapp: string;
   correo: string;
   ciudad: string;
+  medioContacto: ContactPreference | "";
   tipoProyecto: ThermalProjectType | "";
   forma: ThermalShapeType | "";
   largo: string;
@@ -55,6 +57,7 @@ const THERMAL_INITIAL: ThermalState = {
   whatsapp: "",
   correo: "",
   ciudad: "",
+  medioContacto: "",
   tipoProyecto: "",
   forma: "",
   largo: "",
@@ -68,6 +71,7 @@ type SecurityState = {
   whatsapp: string;
   correo: string;
   ciudad: string;
+  medioContacto: ContactPreference | "";
   tipoProyecto: SecurityProjectType | "";
   forma: SecurityShapeType | "";
   largo: string;
@@ -83,6 +87,7 @@ const SECURITY_INITIAL: SecurityState = {
   whatsapp: "",
   correo: "",
   ciudad: "",
+  medioContacto: "",
   tipoProyecto: "",
   forma: "",
   largo: "",
@@ -343,6 +348,7 @@ export default function CTA() {
     if (!next.whatsapp.trim()) errs.whatsapp = "Ingresa tu WhatsApp.";
     if (!next.correo.trim()) errs.correo = "Ingresa tu correo electrónico.";
     if (!next.ciudad.trim()) errs.ciudad = "Ingresa tu ciudad y estado.";
+    if (!next.medioContacto) errs.medioContacto = "Selecciona cómo prefieres recibir tu cotización.";
     if (!next.tipoProyecto) errs.tipoProyecto = "Selecciona el tipo de proyecto.";
     if (!next.forma) errs.forma = "Selecciona la forma de tu alberca.";
 
@@ -375,6 +381,7 @@ export default function CTA() {
       data.set("whatsapp", thermal.whatsapp);
       data.set("correo", thermal.correo);
       data.set("ciudad", thermal.ciudad);
+      data.set("medio_contacto", thermal.medioContacto);
       data.set("formaAlberca", thermal.forma === "Rectangular" ? "Rectangular" : "Irregular");
       if (thermal.forma === "Rectangular") {
         data.set("largo", thermal.largo);
@@ -402,6 +409,7 @@ export default function CTA() {
     if (!next.whatsapp.trim()) errs.whatsapp = "Ingresa tu WhatsApp.";
     if (!next.correo.trim()) errs.correo = "Ingresa tu correo electrónico.";
     if (!next.ciudad.trim()) errs.ciudad = "Ingresa tu ciudad y estado.";
+    if (!next.medioContacto) errs.medioContacto = "Selecciona cómo prefieres recibir tu cotización.";
     if (!next.tipoProyecto) errs.tipoProyecto = "Selecciona el tipo de proyecto.";
     if (!next.forma) errs.forma = "Selecciona la forma de tu alberca.";
 
@@ -435,6 +443,7 @@ export default function CTA() {
       data.set("whatsapp", security.whatsapp);
       data.set("correo", security.correo);
       data.set("ciudad", security.ciudad);
+      data.set("medio_contacto", security.medioContacto);
       data.set("formaAlberca", security.forma === "Rectangular" ? "Rectangular" : "Irregular");
       if (security.forma === "Rectangular") {
         data.set("largo", security.largo);
@@ -622,7 +631,7 @@ export default function CTA() {
               {successProduct === product ? (
                 <div className="border-l-2 border-teal pl-6 py-2">
                   <p className="font-extrabold text-navy text-lg tracking-tight mb-2">
-                    Listo — te escribimos por WhatsApp en menos de 24 horas con tu cotización.
+                    ¡Listo! Nos pondremos en contacto contigo en menos de 24 horas con tu cotización.
                   </p>
                 </div>
               ) : (
@@ -657,9 +666,6 @@ export default function CTA() {
                           onChange={(e) => setThermalField("whatsapp", e.target.value)}
                           className={inputCls}
                         />
-                        <p className="text-xs mt-1" style={{ color: "#6b7280" }}>
-                          Te contactamos por aquí para resolver dudas.
-                        </p>
                         <InlineError message={thermalErrors.whatsapp} />
                       </Field>
 
@@ -690,6 +696,35 @@ export default function CTA() {
                         />
                         <InlineError message={thermalErrors.ciudad} />
                       </Field>
+                    </div>
+
+                    <div className="pt-1 border-t border-navy/[0.08]">
+                      <p className="label-caps text-teal mb-4">¿Cómo prefieres recibir tu cotización?</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <button
+                          type="button"
+                          onClick={() => setThermalField("medioContacto", "WhatsApp")}
+                          className={`text-left p-4 cursor-pointer transition-colors ${
+                            thermal.medioContacto === "WhatsApp"
+                              ? "border-2 border-navy bg-navy/5"
+                              : "border border-navy/20 bg-white"
+                          }`}
+                        >
+                          WhatsApp
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setThermalField("medioContacto", "Correo electrónico")}
+                          className={`text-left p-4 cursor-pointer transition-colors ${
+                            thermal.medioContacto === "Correo electrónico"
+                              ? "border-2 border-navy bg-navy/5"
+                              : "border border-navy/20 bg-white"
+                          }`}
+                        >
+                          Correo electrónico
+                        </button>
+                      </div>
+                      <InlineError message={thermalErrors.medioContacto} />
                     </div>
 
                     {/* STEP 2 — TIPO DE PROYECTO */}
@@ -904,9 +939,6 @@ export default function CTA() {
                           onChange={(e) => setSecurityField("whatsapp", e.target.value)}
                           className={inputCls}
                         />
-                        <p className="text-xs mt-1" style={{ color: "#6b7280" }}>
-                          Te contactamos por aquí para resolver dudas.
-                        </p>
                         <InlineError message={securityErrors.whatsapp} />
                       </Field>
 
@@ -935,6 +967,35 @@ export default function CTA() {
                         />
                         <InlineError message={securityErrors.ciudad} />
                       </Field>
+                    </div>
+
+                    <div className="pt-1 border-t border-navy/[0.08]">
+                      <p className="label-caps text-teal mb-4">¿Cómo prefieres recibir tu cotización?</p>
+                      <div className="grid grid-cols-2 gap-4">
+                        <button
+                          type="button"
+                          onClick={() => setSecurityField("medioContacto", "WhatsApp")}
+                          className={`text-left p-4 cursor-pointer transition-colors ${
+                            security.medioContacto === "WhatsApp"
+                              ? "border-2 border-navy bg-navy/5"
+                              : "border border-navy/20 bg-white"
+                          }`}
+                        >
+                          WhatsApp
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSecurityField("medioContacto", "Correo electrónico")}
+                          className={`text-left p-4 cursor-pointer transition-colors ${
+                            security.medioContacto === "Correo electrónico"
+                              ? "border-2 border-navy bg-navy/5"
+                              : "border border-navy/20 bg-white"
+                          }`}
+                        >
+                          Correo electrónico
+                        </button>
+                      </div>
+                      <InlineError message={securityErrors.medioContacto} />
                     </div>
 
                     {/* STEP 2 — TIPO DE PROYECTO */}
