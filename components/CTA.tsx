@@ -73,6 +73,7 @@ type SecurityState = {
   largo: string;
   ancho: string;
   archivo: File | null;
+  fotosAlrededores: File[];
   notasObstaculos: string;
   confirmacion: boolean;
 };
@@ -87,9 +88,18 @@ const SECURITY_INITIAL: SecurityState = {
   largo: "",
   ancho: "",
   archivo: null,
+  fotosAlrededores: [],
   notasObstaculos: "",
   confirmacion: false,
 };
+
+function appendFilesToFormData(formData: FormData, fieldName: string, files: File[]) {
+  for (const file of files) {
+    if (file.size > 0) {
+      formData.append(fieldName, file, file.name);
+    }
+  }
+}
 
 function Field({
   id,
@@ -261,14 +271,11 @@ export default function CTA() {
   const [loading, setLoading] = useState(false);
   const [successProduct, setSuccessProduct] = useState<ProductType | null>(null);
   const [error, setError] = useState("");
-  const [fileNames, setFileNames] = useState<string[]>([]);
   const [guideOpen, setGuideOpen] = useState(false);
   const [formVisible, setFormVisible] = useState(false);
-  const fileRef = useRef<HTMLInputElement>(null);
   const thermalFileRef = useRef<HTMLInputElement>(null);
   const securityFileRef = useRef<HTMLInputElement>(null);
   const securityPhotosRef = useRef<HTMLInputElement>(null);
-  const [securityPhotoNames, setSecurityPhotoNames] = useState<string[]>([]);
   const formSectionRef = useRef<HTMLDivElement>(null);
   const scrollPendingRef = useRef(false);
 
@@ -373,8 +380,8 @@ export default function CTA() {
         data.set("largo", thermal.largo);
         data.set("ancho", thermal.ancho);
       }
-      if (thermal.forma === "Irregular" && thermal.archivo) {
-        data.append("archivos", thermal.archivo);
+      if (thermal.archivo) {
+        appendFilesToFormData(data, "archivos", [thermal.archivo]);
       }
       data.set("confirmacion", thermal.confirmacion ? "on" : "");
 
@@ -433,15 +440,10 @@ export default function CTA() {
         data.set("largo", security.largo);
         data.set("ancho", security.ancho);
       }
-      if (security.forma === "Irregular" && security.archivo) {
-        data.append("archivos", security.archivo);
+      if (security.archivo) {
+        appendFilesToFormData(data, "archivos", [security.archivo]);
       }
-      const photoFiles = securityPhotosRef.current?.files;
-      if (photoFiles) {
-        for (const file of Array.from(photoFiles)) {
-          if (file.size > 0) data.append("fotos_alrededores", file);
-        }
-      }
+      appendFilesToFormData(data, "fotos_alrededores", security.fotosAlrededores);
       data.set("notas_obstaculos", security.notasObstaculos.trim());
       data.set("confirmacion", security.confirmacion ? "on" : "");
 
@@ -810,12 +812,20 @@ export default function CTA() {
                             className="border border-dashed border-navy/30 p-6 cursor-pointer text-center block"
                             style={{ background: "color-mix(in srgb, #1a3a5c 3%, transparent)" }}
                           >
-                            <span className="text-sm font-medium" style={{ color: "#374151" }}>
-                              Haz clic para subir tu archivo
-                            </span>
-                            <span className="block text-xs mt-2" style={{ color: "#6b7280" }}>
-                              JPG, PNG o PDF — Obligatorio para formas irregulares
-                            </span>
+                            {thermal.archivo ? (
+                              <span className="text-sm text-navy font-medium">
+                                {thermal.archivo.name}
+                              </span>
+                            ) : (
+                              <>
+                                <span className="text-sm font-medium" style={{ color: "#374151" }}>
+                                  Haz clic para subir tu archivo
+                                </span>
+                                <span className="block text-xs mt-2" style={{ color: "#6b7280" }}>
+                                  JPG, PNG o PDF — Obligatorio para formas irregulares
+                                </span>
+                              </>
+                            )}
                             <input
                               ref={thermalFileRef}
                               type="file"
@@ -1045,12 +1055,20 @@ export default function CTA() {
                             className="border border-dashed border-navy/30 p-6 cursor-pointer text-center block"
                             style={{ background: "color-mix(in srgb, #1a3a5c 3%, transparent)" }}
                           >
-                            <span className="text-sm font-medium" style={{ color: "#374151" }}>
-                              Haz clic para subir tu archivo
-                            </span>
-                            <span className="block text-xs mt-2" style={{ color: "#6b7280" }}>
-                              JPG, PNG o PDF — Obligatorio para formas irregulares
-                            </span>
+                            {security.archivo ? (
+                              <span className="text-sm text-navy font-medium">
+                                {security.archivo.name}
+                              </span>
+                            ) : (
+                              <>
+                                <span className="text-sm font-medium" style={{ color: "#374151" }}>
+                                  Haz clic para subir tu archivo
+                                </span>
+                                <span className="block text-xs mt-2" style={{ color: "#6b7280" }}>
+                                  JPG, PNG o PDF — Obligatorio para formas irregulares
+                                </span>
+                              </>
+                            )}
                             <input
                               ref={securityFileRef}
                               type="file"
@@ -1089,9 +1107,9 @@ export default function CTA() {
                         className="border border-dashed border-navy/30 p-6 cursor-pointer text-center block"
                         style={{ background: "color-mix(in srgb, #1a3a5c 3%, transparent)" }}
                       >
-                        {securityPhotoNames.length > 0 ? (
+                        {security.fotosAlrededores.length > 0 ? (
                           <span className="text-sm text-navy font-medium text-center">
-                            {securityPhotoNames.join(", ")}
+                            {security.fotosAlrededores.map((f) => f.name).join(", ")}
                           </span>
                         ) : (
                           <>
@@ -1111,7 +1129,7 @@ export default function CTA() {
                           className="sr-only"
                           onChange={(e) => {
                             const files = Array.from(e.target.files ?? []);
-                            setSecurityPhotoNames(files.map((f) => f.name));
+                            setSecurityField("fotosAlrededores", files);
                           }}
                         />
                       </label>

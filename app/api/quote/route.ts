@@ -3,6 +3,31 @@ import { Resend } from "resend";
 
 const OWNER_EMAIL = process.env.OWNER_EMAIL ?? "[OWNER_EMAIL]";
 
+const FILE_FIELD_NAMES = ["archivos", "fotos_alrededores", "files"] as const;
+
+async function attachmentsFromFormData(formData: FormData) {
+  const attachments: { filename: string; content: string }[] = [];
+
+  for (const fieldName of FILE_FIELD_NAMES) {
+    for (const entry of formData.getAll(fieldName)) {
+      if (!(entry instanceof Blob) || entry.size === 0) continue;
+
+      const bytes = await entry.arrayBuffer();
+      const filename =
+        entry instanceof File && entry.name.trim()
+          ? entry.name
+          : `${fieldName}-${attachments.length + 1}`;
+
+      attachments.push({
+        filename,
+        content: Buffer.from(bytes).toString("base64"),
+      });
+    }
+  }
+
+  return attachments;
+}
+
 export async function POST(req: NextRequest) {
   const resend = new Resend(process.env.RESEND_API_KEY);
   try {
@@ -25,21 +50,7 @@ export async function POST(req: NextRequest) {
     const isSeguridad = tipoCubierta.toLowerCase().includes("seguridad");
     const subjectPrefix = isSeguridad ? "Nueva cotización seguridad" : "Nueva cotización térmica";
 
-    const rawFiles = [
-      ...(data.getAll("archivos") as File[]),
-      ...(data.getAll("fotos_alrededores") as File[]),
-    ];
-    const attachments: { filename: string; content: Buffer }[] = [];
-
-    for (const file of rawFiles) {
-      if (file.size > 0) {
-        const bytes = await file.arrayBuffer();
-        attachments.push({
-          filename: file.name,
-          content: Buffer.from(bytes),
-        });
-      }
-    }
+    const attachments = await attachmentsFromFormData(data);
 
     const displayPhone = whatsapp || telefono;
 
