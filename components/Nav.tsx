@@ -38,6 +38,7 @@ export default function Nav() {
         <a
           href="#cotizacion"
           className="label-caps bg-white text-navy px-5 py-2.5 hover:bg-white/90 transition-colors"
+          onClick={() => (window as any).gtag_report_conversion?.()}
         >
           Solicitar Cotización
         </a>

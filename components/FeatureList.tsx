@@ -16,7 +16,7 @@ const features = [
   },
   {
     index: "04",
-    title: "Hecha para resisitir el sol.",
+    title: "Hecha para resistir el sol.",
     body: "Nuestro material LDPE con estabilizadores UV aguanta años de exposición directa sin perder forma ni función.",
   },
   {

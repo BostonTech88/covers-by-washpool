@@ -394,6 +394,7 @@ export default function CTA() {
 
       const res = await fetch("/api/quote", { method: "POST", body: data });
       if (!res.ok) throw new Error("server");
+      (window as any).gtag_report_conversion?.();
       setSuccessProduct("termica");
     } catch {
       setError("Ocurrió un error al enviar. Intenta de nuevo o escríbenos por WhatsApp.");
@@ -458,6 +459,7 @@ export default function CTA() {
 
       const res = await fetch("/api/quote", { method: "POST", body: data });
       if (!res.ok) throw new Error("server");
+      (window as any).gtag_report_conversion?.();
       setSuccessProduct("seguridad");
     } catch {
       setError("Ocurrió un error al enviar. Intenta de nuevo o escríbenos por WhatsApp.");
