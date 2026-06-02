@@ -5,6 +5,7 @@ import Specs from "@/components/Specs";
 import Process from "@/components/Process";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
+import WhatsAppButton from "@/components/WhatsAppButton";
 
 export default function Home() {
   return (
@@ -16,6 +17,7 @@ export default function Home() {
       <Process />
       <CTA />
       <Footer />
+      <WhatsAppButton />
     </main>
   );
 }
