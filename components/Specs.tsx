@@ -6,6 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 type SpecItem = { label: string; value: string };
 
 const thermalSpecs: SpecItem[] = [
+  { label: "Precio", value: "$119 MXN / m² + envío" },
   { label: "Material", value: "LDPE 100%, burbujas de aire sellado" },
   { label: "Corte", value: "A medida exacta de tu alberca" },
   { label: "Envío", value: "Todo México" },

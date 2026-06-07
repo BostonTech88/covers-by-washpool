@@ -63,7 +63,7 @@ export default function Hero() {
         <div className="flex justify-end bg-white">
           <div className="w-full max-w-[640px] px-6 md:pl-8 xl:pl-16 md:pr-16 py-24 md:py-32 flex flex-col justify-center">
             <span className="label-caps text-teal mb-6 block">
-              La cubierta necesitas
+              La cubierta que necesitas
             </span>
 
             <h1 className="text-5xl md:text-6xl font-extrabold text-navy leading-[1.05] tracking-tight mb-6">

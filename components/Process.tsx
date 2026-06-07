@@ -2,7 +2,7 @@ const steps = [
   {
     number: "01",
     title: "Nos dices cómo es tu alberca",
-    body: "Llenas el formulario en menos de 3 minutos. Solo necesitas las medidas, te ayudamos con el resto.",
+    body: "Escríbenos por WhatsApp con las medidas de tu alberca.",
   },
   {
     number: "02",
