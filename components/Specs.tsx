@@ -86,7 +86,7 @@ function ProductColumn({
         <a
           href={ctaHref}
           className="inline-block text-navy font-semibold text-sm hover:text-teal transition-colors"
-          onClick={() => (window as any).gtag_report_conversion?.()}
+
         >
           Solicitar cotización →
         </a>
