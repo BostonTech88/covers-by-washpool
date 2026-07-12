@@ -3,7 +3,7 @@
 export default function WhatsAppButton() {
   return (
     <a
-      href="https://wa.me/524424375325?text=Hola%2C%20me%20interesa%20cotizar%20una%20cubierta%20para%20mi%20alberca."
+      href="https://wa.me/525548919773?text=Hola%2C%20me%20interesa%20cotizar%20una%20cubierta%20para%20mi%20alberca."
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Contáctanos por WhatsApp"

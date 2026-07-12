@@ -11,6 +11,23 @@ export default function Footer() {
           </span>
         </div>
 
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3 sm:gap-6">
+          <a
+            href="https://wa.me/525548919773"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="label-caps text-teal hover:underline"
+          >
+            WhatsApp: 55 4891 9773
+          </a>
+          <a
+            href="mailto:ventas@coversbywashpool.com"
+            className="label-caps text-ink/40 hover:text-teal transition-colors"
+          >
+            ventas@coversbywashpool.com
+          </a>
+        </div>
+
         <p className="label-caps text-ink/30">
           &copy; {new Date().getFullYear()} Covers by Washpool
         </p>
