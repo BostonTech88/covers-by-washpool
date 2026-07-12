@@ -7,7 +7,7 @@ const steps = [
   {
     number: "02",
     title: "Recibes tu propuesta en 24 horas",
-    body: "Sin llamadas, sin visitas obligatorias. Te mandamos una cotización directo a tu correo.",
+    body: "Sin llamadas, sin visitas obligatorias. Te respondemos directo por WhatsApp con precio y envío.",
   },
   {
     number: "03",

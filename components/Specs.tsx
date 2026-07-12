@@ -3,114 +3,26 @@
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-type SpecItem = { label: string; value: string };
-
-const thermalSpecs: SpecItem[] = [
+const thermalHighlights = [
   { label: "Precio", value: "$119 MXN / m² + envío" },
   { label: "Material", value: "LDPE 100%, burbujas de aire sellado" },
-  { label: "Corte", value: "A medida exacta de tu alberca" },
-  { label: "Envío", value: "Todo México" },
-  { label: "Tiempo de entrega", value: "8–18 días hábiles" },
+  { label: "Entrega", value: "8–18 días hábiles" },
 ];
 
-const securitySpecs: SpecItem[] = [
+const securityHighlights = [
   { label: "Material", value: "Malla HD tensada" },
   { label: "Resistencia", value: "Hasta 100 kg/m²" },
   { label: "Sistema", value: "Anclaje perimetral de acero inox." },
-  { label: "Corte", value: "A medida exacta" },
-  { label: "Envío", value: "Todo México" },
-  { label: "Tiempo de entrega", value: "10–12 semanas" },
+  { label: "Entrega", value: "10–12 semanas" },
 ];
-
-const ROW_COUNT = 6;
-
-function padSpecs(specs: SpecItem[]): (SpecItem | null)[] {
-  const padded: (SpecItem | null)[] = [...specs];
-  while (padded.length < ROW_COUNT) padded.push(null);
-  return padded;
-}
-
-function SpecRow({ spec }: { spec: SpecItem | null }) {
-  if (!spec) {
-    return (
-      <div
-        className="min-h-[48px] border-b border-gray-100"
-        aria-hidden="true"
-      />
-    );
-  }
-
-  return (
-    <div className="min-h-[48px] border-b border-gray-100 grid grid-cols-[1fr_1.2fr] gap-4 items-center">
-      <span className="text-xs tracking-wider text-gray-400 uppercase">
-        {spec.label}
-      </span>
-      <span className="text-sm text-gray-800 leading-snug">{spec.value}</span>
-    </div>
-  );
-}
-
-function ProductColumn({
-  badge,
-  title,
-  subtitle,
-  specs,
-  ctaHref,
-  afterCta,
-}: {
-  badge?: React.ReactNode;
-  title: string;
-  subtitle: string;
-  specs: (SpecItem | null)[];
-  ctaHref: string;
-  afterCta?: React.ReactNode;
-}) {
-  return (
-    <div
-      className="grid md:grid-rows-subgrid md:row-span-8 border p-8 min-h-full"
-      style={{ border: "1px solid #e5e7eb" }}
-    >
-      <div>
-        {badge}
-        <h3 className="text-2xl font-bold text-navy tracking-tight mb-1">
-          {title}
-        </h3>
-        <p className="text-sm text-gray-500">{subtitle}</p>
-      </div>
-
-      {specs.map((spec, i) => (
-        <SpecRow key={i} spec={spec} />
-      ))}
-
-      <div className="self-start">
-        <a
-          href={ctaHref}
-          className="inline-block text-navy font-semibold text-sm hover:text-teal transition-colors"
-
-        >
-          Solicitar cotización →
-        </a>
-        {afterCta}
-      </div>
-    </div>
-  );
-}
 
 export default function Specs() {
   const gallery = useMemo(
     () => [
-      {
-        src: "/seguridad-1.jpg",
-        caption: "Instalación residencial — cubierta de seguridad",
-      },
-      {
-        src: "/seguridad-2.jpg",
-        caption: "Sistema de anclaje perimetral tensado",
-      },
-      {
-        src: "/seguridad-3.jpg",
-        caption: "Instalación en jardín — acabado premium",
-      },
+      { src: "/seguridad-1.jpg", caption: "Instalación residencial — deck de madera" },
+      { src: "/seguridad-2.jpg", caption: "Cubierta de malla HD — casa moderna" },
+      { src: "/seguridad-3.jpg", caption: "Acabado gris — jardín residencial" },
+      { src: "/seguridad-4.jpg", caption: "Instalación en casa de lujo" },
     ],
     []
   );
@@ -128,9 +40,7 @@ export default function Specs() {
 
   const closeLightbox = () => {
     setLightboxVisible(false);
-    closeTimeoutRef.current = window.setTimeout(() => {
-      setLightboxOpen(false);
-    }, 200);
+    closeTimeoutRef.current = window.setTimeout(() => setLightboxOpen(false), 200);
   };
 
   const prev = () => setActiveIdx((i) => (i - 1 + gallery.length) % gallery.length);
@@ -149,47 +59,132 @@ export default function Specs() {
   }, [lightboxOpen]);
 
   return (
-    <section id="productos" className="bg-white border-y border-navy/10 py-24 md:py-32">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-4">
-          <span className="label-caps text-teal">Nuestros productos</span>
-        </div>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-navy tracking-tight mb-14">
+    <section id="productos" className="bg-white">
+
+      {/* Section header */}
+      <div className="max-w-6xl mx-auto px-6 pt-24 md:pt-32 pb-14">
+        <span className="label-caps text-teal block mb-4">Nuestros productos</span>
+        <h2 className="text-3xl md:text-4xl font-extrabold text-navy tracking-tight">
           Elige la cubierta correcta para tu alberca.
         </h2>
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 md:grid-rows-[auto_repeat(6,minmax(48px,auto))_auto] gap-8 md:gap-x-8 md:gap-y-0 items-stretch">
-          <ProductColumn
-            badge={
-              <span className="label-caps inline-block bg-teal text-white px-3 py-1.5 mb-5">
+      {/* ── Cubierta Térmica: texto izquierda, foto derecha ── */}
+      <div className="border-t border-navy/10">
+        <div className="grid md:grid-cols-2 min-h-[520px]">
+
+          {/* Texto */}
+          <div className="flex justify-end bg-white">
+            <div className="w-full max-w-[580px] px-6 md:pl-8 xl:pl-16 md:pr-16 py-16 md:py-20 flex flex-col justify-center">
+              <span className="label-caps inline-block bg-teal text-white px-3 py-1.5 mb-6 self-start">
                 Producto principal
               </span>
-            }
-            title="Cubierta Térmica"
-            subtitle="Tu alberca caliente y limpia, todo el año"
-            specs={padSpecs(thermalSpecs)}
-            ctaHref="#cotizacion-termica"
-          />
+              <h3 className="text-2xl md:text-3xl font-extrabold text-navy tracking-tight mb-2">
+                Cubierta Térmica
+              </h3>
+              <p className="text-sm mb-10" style={{ color: "#6b7280" }}>
+                Tu alberca caliente y limpia, todo el año
+              </p>
 
-          <ProductColumn
-            title="Cubierta de Seguridad"
-            subtitle="Protección real contra accidentes y contaminación"
-            specs={padSpecs(securitySpecs)}
-            ctaHref="#cotizacion-seguridad"
-            afterCta={
-              <button
-                type="button"
-                onClick={openLightbox}
-                className="block mt-2 text-sm hover:underline"
-                style={{ color: "#1e7fd4" }}
+              <div className="flex flex-col gap-0 mb-10 border-t border-navy/10">
+                {thermalHighlights.map((h) => (
+                  <div
+                    key={h.label}
+                    className="flex gap-6 items-center border-b border-navy/10 py-4"
+                  >
+                    <span className="text-xs tracking-wider uppercase w-24 flex-shrink-0" style={{ color: "#9ca3af" }}>
+                      {h.label}
+                    </span>
+                    <span className="text-sm" style={{ color: "#1f2937" }}>{h.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <a
+                href="#cotizacion-termica"
+                className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center self-start"
               >
-                Ver instalaciones →
-              </button>
-            }
-          />
+                Cotizar por WhatsApp →
+              </a>
+            </div>
+          </div>
+
+          {/* Foto */}
+          <div className="relative h-72 md:h-auto">
+            <div className="absolute inset-y-0 left-0 w-px bg-navy/10 hidden md:block" />
+            <Image
+              src="/hero-1.jpg"
+              alt="Cubierta térmica para alberca"
+              fill
+              className="object-cover"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
         </div>
       </div>
 
+      {/* ── Cubierta de Seguridad: foto izquierda, texto derecha ── */}
+      <div className="border-t border-navy/10 border-b border-navy/10">
+        <div className="grid md:grid-cols-2 min-h-[520px]">
+
+          {/* Foto (se mueve abajo en móvil) */}
+          <div className="relative h-72 md:h-auto order-2 md:order-1">
+            <Image
+              src="/seguridad-2.jpg"
+              alt="Cubierta de seguridad para alberca"
+              fill
+              className="object-cover object-top"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+
+          {/* Texto */}
+          <div className="flex justify-start bg-offwhite order-1 md:order-2">
+            <div className="w-full max-w-[580px] px-6 md:pl-16 xl:pl-20 md:pr-8 xl:pr-16 py-16 md:py-20 flex flex-col justify-center">
+              <div className="hidden md:block absolute inset-y-0 left-0 w-px bg-navy/10" />
+              <h3 className="text-2xl md:text-3xl font-extrabold text-navy tracking-tight mb-2">
+                Cubierta de Seguridad
+              </h3>
+              <p className="text-sm mb-10" style={{ color: "#6b7280" }}>
+                Protección real contra accidentes y contaminación
+              </p>
+
+              <div className="flex flex-col gap-0 mb-10 border-t border-navy/10">
+                {securityHighlights.map((h) => (
+                  <div
+                    key={h.label}
+                    className="flex gap-6 items-center border-b border-navy/10 py-4"
+                  >
+                    <span className="text-xs tracking-wider uppercase w-24 flex-shrink-0" style={{ color: "#9ca3af" }}>
+                      {h.label}
+                    </span>
+                    <span className="text-sm" style={{ color: "#1f2937" }}>{h.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-3 items-start">
+                <a
+                  href="#cotizacion-seguridad"
+                  className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center"
+                >
+                  Cotizar por WhatsApp →
+                </a>
+                <button
+                  type="button"
+                  onClick={openLightbox}
+                  className="text-sm font-semibold hover:underline transition-colors"
+                  style={{ color: "#1e7fd4" }}
+                >
+                  Ver instalaciones →
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Lightbox */}
       {lightboxOpen && (
         <div
           className={`fixed inset-0 z-50 transition-opacity duration-200 ease-out ${
@@ -206,11 +201,10 @@ export default function Specs() {
             type="button"
             aria-label="Cerrar"
             onClick={closeLightbox}
-            className="absolute top-4 right-4 w-10 h-10 text-white flex items-center justify-center"
+            className="absolute top-4 right-4 w-10 h-10 text-white flex items-center justify-center text-2xl"
           >
             ×
           </button>
-
           <button
             type="button"
             aria-label="Anterior"

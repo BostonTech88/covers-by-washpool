@@ -10,8 +10,8 @@ export default function Hero() {
       { src: "/hero-2.jpg", portrait: false },
       { src: "/hero-3.jpg", portrait: false },
       { src: "/hero-4.jpg", portrait: false },
-      { src: "/hero-5.jpg", portrait: true },
-      { src: "/hero-6.jpg", portrait: true },
+      { src: "/hero-5.jpg", portrait: false },
+      { src: "/hero-6.jpg", portrait: false },
     ],
     []
   );
@@ -25,7 +25,7 @@ export default function Hero() {
     if (tickTimeoutRef.current) window.clearTimeout(tickTimeoutRef.current);
     tickTimeoutRef.current = window.setTimeout(() => {
       goTo((active + 1) % images.length, false);
-    }, 4000);
+    }, 5000);
   };
 
   const goTo = (next: number, resetTimer: boolean) => {
