@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const thermalHighlights = [
-  { label: "Precio", value: "$119 MXN / m² + envío" },
+  { label: "Precio", value: "$121 MXN / m² + envío" },
   { label: "Material", value: "LDPE 100%, burbujas de aire sellado" },
   { label: "Entrega", value: "8–18 días hábiles" },
 ];
