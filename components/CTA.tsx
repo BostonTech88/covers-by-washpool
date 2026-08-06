@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { trackLead } from "@/lib/analytics";
 
 type ProductType = "termica" | "seguridad";
 
@@ -229,7 +230,7 @@ export default function CTA() {
                     href="https://wa.me/525548919773?text=Hola%2C%20me%20interesa%20cotizar%20una%20cubierta%20t%C3%A9rmica%20para%20mi%20alberca."
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => (window as any).gtag_report_conversion?.()}
+                    onClick={() => trackLead("termica", "cta_termica")}
                     className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center"
                   >
                     Cotizar por WhatsApp →
@@ -249,7 +250,7 @@ export default function CTA() {
                     href="https://wa.me/525548919773?text=Hola%2C%20me%20interesa%20cotizar%20una%20cubierta%20de%20seguridad%20para%20mi%20alberca."
                     target="_blank"
                     rel="noopener noreferrer"
-                    onClick={() => (window as any).gtag_report_conversion?.()}
+                    onClick={() => trackLead("seguridad", "cta_seguridad")}
                     className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center"
                   >
                     Cotizar por WhatsApp →

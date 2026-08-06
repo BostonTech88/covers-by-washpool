@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { trackLead } from "@/lib/analytics";
 
 const thermalHighlights = [
   { label: "Precio", value: "$121 MXN / m² + envío" },
@@ -103,6 +104,7 @@ export default function Specs() {
               <a
                 href="#cotizacion-termica"
                 className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center self-start"
+                onClick={() => trackLead("termica", "specs_termica")}
               >
                 Cotizar por WhatsApp →
               </a>
@@ -167,6 +169,7 @@ export default function Specs() {
                 <a
                   href="#cotizacion-seguridad"
                   className="inline-block bg-navy text-white font-semibold text-sm tracking-widest uppercase py-4 px-8 hover:bg-teal transition-colors text-center"
+                  onClick={() => trackLead("seguridad", "specs_seguridad")}
                 >
                   Cotizar por WhatsApp →
                 </a>
