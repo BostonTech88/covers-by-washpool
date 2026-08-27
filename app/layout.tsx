@@ -83,7 +83,11 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body>{children}</body>
+      <body>
+        {children}
+        {/* Visito Webchat */}
+        <script async src="https://chat.visitoai.com/widget/webchat.js" data-tenant-slug="coversbywashpool" />
+      </body>
     </html>
   );
 }
