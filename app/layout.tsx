@@ -1,7 +1,9 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { SITE_URL } from "@/lib/seo";
 
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Covers by Washpool",
   description:
     "Cubiertas térmicas a medida para albercas en todo México. Reduce la evaporación, conserva el calor y protege tu inversión. Envío a toda la República.",
@@ -13,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="es-MX">
       <head>
         {/* Google Analytics */}
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-LT5KHNV64F" />
