@@ -21,7 +21,9 @@ con cuerpo vacío. No se aceptan credenciales por query ni cookies.
 Todas las respuestas del handler usan Cache-Control private/no-store/max-age=0,
 CDN-Cache-Control no-store, Surrogate-Control no-store, Vary Authorization y
 X-Robots-Tag noindex/nofollow/noarchive. Es una ruta dinámica Node.js. No registra
-solicitudes ni cabeceras y no habilita CORS. No se añade al sitemap; robots ya
+solicitudes ni cabeceras completas y no habilita CORS. La instrumentación temporal
+registra únicamente estados enumerados en logs privados, con límites estrictos;
+ver [procedimiento de instrumentación](proxy-auth-instrumentation.md). No se añade al sitemap; robots ya
 excluye /api/. Los errores que genere infraestructura antes de llegar al handler
 no están bajo control de este código. Tampoco puede controlar la política de
 logs del proveedor: no habilitar captura de Authorization/cookies en el hosting.
@@ -153,6 +155,8 @@ por separado de la normalización de Next.js.
    - app/api/internal/proxy-diagnostic/route.ts
    - tests/proxy-diagnostic.test.mjs
    - tests/proxy-diagnostic-http.test.mjs
+   - tests/proxy-diagnostic-status.test.mjs
+   - docs/proxy-auth-instrumentation.md
    - docs/proxy-diagnostic.md (este procedimiento)
 3. Revisar y desplegar esa eliminación. Verificar 404 en la URL de ambos dominios,
    autenticada y anónima; la 404 estándar de Next.js ya puede tener cuerpo HTML.
