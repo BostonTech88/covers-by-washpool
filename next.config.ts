@@ -1,6 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Build-time opt-in: enable only after verifying that the hosting proxy
+  // preserves the visitor's Host for BOTH apex and www. See docs/www-redirect.md.
+  redirects: async () =>
+    process.env.ENABLE_WWW_HOST_REDIRECT === "true"
+      ? [
+          {
+            source: "/:path*",
+            has: [{ type: "host", value: "coversbywashpool\\.com" }],
+            destination: "https://www.coversbywashpool.com/:path*",
+            permanent: true,
+          },
+        ]
+      : [],
+
   generateBuildId: async () => {
     return Date.now().toString();
   },
