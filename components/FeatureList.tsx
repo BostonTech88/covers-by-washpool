@@ -1,61 +1,76 @@
+import Image from "next/image";
 const features = [
-  {
-    index: "01",
-    title: "A tu medida.",
-    body: "Le damos a tu alberca una cubierta unica. Sin recortes, sin bordes sobrantes, sin huecos por donde se escape el calor.",
-  },
-  {
-    index: "02",
-    title: "Retiene el calor.",
-    body: "Miles de burbujas de aire selladas trabajan toda la noche para que el agua amanezca a la misma temperatura. Sin calefacción extra, sin gasto.",
-  },
-  {
-    index: "03",
-    title: "Menos agua perdida. Menos químicos tirados.",
-    body: "Cada litro que se evapora se lleva cloro y tratamiento contigo. Una cubierta puede ahorrarte semanas de mantenimiento al mes.",
-  },
-  {
-    index: "04",
-    title: "Hecha para resistir el sol.",
-    body: "Nuestro material LDPE con estabilizadores UV aguanta años de exposición directa sin perder forma ni función.",
-  },
-  {
-    index: "05",
-    title: "Si tu alberca tiene forma, le hacemos su cubierta.",
-    body: "Rectangular, redonda, con escalones o completamente irregular.",
-  },
+  [
+    "01",
+    "Calidad del producto",
+    "Materiales y acabados de calidad para cubrir tu alberca en el día a día.",
+  ],
+  [
+    "02",
+    "Hecha a tu medida",
+    "Una cubierta adaptada a las dimensiones y a la forma de tu alberca.",
+  ],
+  [
+    "03",
+    "Compra sencilla",
+    "Calcula tu precio y confirma los detalles de tu pedido por WhatsApp.",
+  ],
 ];
-
 export default function FeatureList() {
   return (
-    <section id="por-que-covers" className="bg-offwhite py-24 md:py-32">
-      <div className="max-w-6xl mx-auto px-6">
-        <div className="mb-4">
-          <span className="label-caps text-teal">Por qué Covers</span>
-        </div>
-        <h2 className="text-3xl md:text-4xl font-extrabold text-navy tracking-tight mb-14 max-w-xl">
-          No es un plástico azul. Es ingeniería térmica.
-        </h2>
-
-        <div className="divide-y divide-navy/10 border-t border-navy/10">
-          {features.map((f) => (
-            <div
-              key={f.index}
-              className="grid md:grid-cols-[72px_1fr_2fr] gap-2 md:gap-10 py-9"
-            >
-              <span className="text-3xl font-extrabold text-navy/[0.12] tabular-nums leading-none pt-1">
-                {f.index}
-              </span>
-              <h3 className="text-lg font-extrabold text-navy tracking-tight leading-snug">
-                {f.title}
-              </h3>
-              <p className="text-base leading-relaxed" style={{ color: "#374151" }}>
-                {f.body}
-              </p>
-            </div>
+    <>
+      <section className="differentiators" aria-label="Por qué elegir Covers">
+        <div className="wrap feature-grid">
+          {features.map(([number, title, description]) => (
+            <article key={number}>
+              <span className="feature-number">{number}</span>
+              <div>
+                <h2>{title}</h2>
+                <p>{description}</p>
+              </div>
+            </article>
           ))}
         </div>
-      </div>
-    </section>
+      </section>
+      <section id="termicas" className="section benefits">
+        <div className="wrap benefits-layout">
+          <div className="benefit-photo">
+            <Image
+              src="/images/thermal-garden.webp"
+              alt="Cubierta térmica azul ajustada a una alberca junto a un jardín"
+              fill
+              sizes="(max-width: 767px) 100vw, 45vw"
+            />
+          </div>
+          <div>
+            <p className="eyebrow">MÁS MOMENTOS EN TU ALBERCA</p>
+            <h2>
+              Disfruta más.
+              <br />
+              Pierde menos agua y calor.
+            </h2>
+            <p>
+              Una cubierta térmica flota sobre el agua y ayuda a conservar su
+              temperatura mientras la alberca no está en uso.
+            </p>
+            <ul className="benefit-list">
+              <li>Ayuda a conservar la temperatura del agua.</li>
+              <li>Reduce la evaporación al cubrir la superficie.</li>
+              <li>
+                Limita la entrada de hojas y residuos mientras está colocada.
+              </li>
+              <li>Se fabrica para las dimensiones de tu alberca.</li>
+            </ul>
+            <p className="safety-note">
+              Una cubierta térmica no es una cubierta de seguridad. No está
+              diseñada para sostener personas ni prevenir caídas.
+            </p>
+            <a href="#calculadora" className="text-link">
+              Calcula la tuya <span aria-hidden="true">→</span>
+            </a>
+          </div>
+        </div>
+      </section>
+    </>
   );
 }
